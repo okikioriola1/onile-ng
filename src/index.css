@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+@import "tailwindcss";
+
+:root {
+  --surface: #e8f0ec;
+  --surface-strong: #cddbd2;
+  --brand: #5a8a6f;
+  --forest: #1f4a35;
+  --card: #fafaf8;
+  --gold: #c9923a;
+  --muted-teal: #3a7a68;
+  --body: #5a6a62;
+  font-family: "Inter", "DM Sans", sans-serif;
+  color: var(--forest);
+  background: radial-gradient(circle at top left, rgba(201, 146, 58, 0.12), transparent 30%), var(--surface);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--forest);
+  background: var(--surface);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
