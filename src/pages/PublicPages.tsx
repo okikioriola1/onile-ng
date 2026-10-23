@@ -886,12 +886,9 @@ function AnimatedCountStat({
   const [displayValue, setDisplayValue] = useState(shouldReduceMotion ? value : 0)
 
   useEffect(() => {
-    if (!inView || shouldReduceMotion) {
-      if (shouldReduceMotion) setDisplayValue(value)
-      return
-    }
+    if (!inView || shouldReduceMotion) return
     let frame = 0
-    const duration = 1200
+    const duration = 1000
     const start = performance.now()
 
     const tick = (now: number) => {
@@ -905,7 +902,8 @@ function AnimatedCountStat({
     return () => cancelAnimationFrame(frame)
   }, [inView, shouldReduceMotion, value])
 
-  const formatted = decimals > 0 ? displayValue.toFixed(decimals) : Math.round(displayValue).toString()
+  const visibleValue = shouldReduceMotion ? value : displayValue
+  const formatted = decimals > 0 ? visibleValue.toFixed(decimals) : Math.round(visibleValue).toString()
 
   return (
     <div ref={ref}>

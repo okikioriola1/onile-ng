@@ -357,16 +357,20 @@ export function MortgageApplicationPage() {
     [savingsAccounts, user?.id],
   )
 
+  const existingDraft = applications.find((item) =>
+    item.userId === user?.id && item.listingId === listing?.id && item.state === 'started',
+  )
+  // Keep the selected application after submission changes its workflow state.
+  if (!draftId && existingDraft) setDraftId(existingDraft.id)
+
   useEffect(() => {
     if (!user || !listing || draftId) return
-    const existing = applications.find((item) => item.userId === user.id && item.listingId === listing.id && item.state === 'started')
-    if (existing) {
-      setDraftId(existing.id)
-      return
-    }
-    const created = createDraft(user.id, listing.id)
-    setDraftId(created.id)
-  }, [applications, createDraft, draftId, listing, user])
+    // Read the live store so Strict Mode effect replay cannot create a duplicate.
+    const existing = useAppStore.getState().applications.find((item) =>
+      item.userId === user.id && item.listingId === listing.id && item.state === 'started',
+    )
+    if (!existing) createDraft(user.id, listing.id)
+  }, [createDraft, draftId, listing, user])
 
   const application = useMemo(() => {
     if (!user || !listing) return undefined
