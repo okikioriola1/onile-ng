@@ -2,6 +2,8 @@
 
 A frontend prototype for exploring a Nigerian property marketplace and the workflows around buying, listing, and financing a home. Buyers, sellers, and operations staff have separate workspaces backed by shared, seeded application state.
 
+[View the hosted demo](https://onile-ng.vercel.app)
+
 ![Onilé property marketplace](docs/screenshots/marketplace.png)
 
 ## Explore the demo
