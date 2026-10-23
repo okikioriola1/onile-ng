@@ -16,6 +16,14 @@ export function PublicShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  const [menuLocation, setMenuLocation] = useState(location.pathname + location.hash)
+
+  // Reset navigation state as the route changes, before rendering the new page.
+  const currentLocation = location.pathname + location.hash
+  if (menuLocation !== currentLocation) {
+    setMenuLocation(currentLocation)
+    setMobileOpen(false)
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80)
@@ -23,10 +31,6 @@ export function PublicShell({ children }: { children: ReactNode }) {
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  useEffect(() => {
-    setMobileOpen(false)
-  }, [location.pathname, location.hash])
 
   return (
     <div className="min-h-screen bg-sage-50 text-sage-900">

@@ -1,73 +1,79 @@
-# React + TypeScript + Vite
+# Onilé — Property and Mortgage Workflow Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A frontend prototype for exploring a Nigerian property marketplace and the workflows around buying, listing, and financing a home. Buyers, sellers, and operations staff have separate workspaces backed by shared, seeded application state.
 
-Currently, two official plugins are available:
+[View the hosted demo](https://onile-ng.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![Onilé property marketplace](docs/screenshots/marketplace.png)
 
-## React Compiler
+## Explore the demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Start the app locally and browse `/marketplace` without signing in.
+2. Open `/auth` and select a seeded demo account.
+3. Explore saved properties, simulated savings, and mortgage applications in the buyer workspace.
+4. Sign out and select a seller or admin account to explore listing and review workflows.
 
-## Expanding the ESLint configuration
+| Demo role | Email | Password |
+| --- | --- | --- |
+| Buyer | `amina@onileng.com` | `demo1234` |
+| Self-employed buyer | `tunde@onileng.com` | `demo1234` |
+| Seller | `seller@onileng.com` | `demo1234` |
+| Admin | `admin@onileng.com` | `demo1234` |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+These are fictional, public demo accounts defined in [the seed data](src/lib/seed.ts).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Public marketplace with search, property filters, and listing details.
+- Buyer workspace with saved properties, savings goals, and mortgage application steps.
+- Multi-step onboarding with locally persisted drafts and document metadata.
+- Seller workspace for property submissions and listing status.
+- Admin workspace for onboarding, listing reviews, and application progression.
+- Client-side role guards, notifications, and application audit history.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Stack and architecture
+
+React 19, TypeScript, Vite, Tailwind CSS, Zustand, React Router, React Hook Form, Zod, and Recharts. Vitest and Testing Library cover selected business rules and route guards.
+
+Route components are lazy-loaded. Zustand holds shared state and persists it under the browser's `onile-ng-store` local storage key. Business rules are separate from page components so they can be tested directly.
+
+## Run locally
+
+Use Node.js 24 and npm. No backend or environment file is required.
+
+```bash
+git clone https://github.com/okikioriola1/onile-ng.git
+cd onile-ng
+npm ci
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open the URL printed by Vite. To restore the original seed state, remove the `onile-ng-store` entry from local storage for that origin and reload.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Checks
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run lint
+npm test
+npm run build
+npm run preview
 ```
+
+GitHub Actions runs lint, tests, and the production build on pushes and pull requests. Existing tests cover public listing visibility, search filters, mortgage eligibility, submission readiness, off-plan milestone requirements, route access, draft creation under Strict Mode, draft resumption, and mobile menu reset on navigation.
+
+## Code map
+
+- `src/App.tsx`: routes and role guards.
+- `src/pages/`: public, authentication, buyer, seller, and admin screens.
+- `src/store/useAppStore.ts`: persisted state and demo actions.
+- `src/lib/business.ts`: workflow rules and selectors.
+- `src/lib/seed.ts`: fictional users, properties, applications, and credentials.
+- `src/types.ts`: shared domain types.
+
+## Demo boundaries
+
+Authentication, bank accounts, deposits, KYC reviews, and mortgage decisions are simulated in the browser. Route guards demonstrate navigation behavior; they do not provide server-side authorization. Uploaded documents are represented by filenames and metadata, rather than stored files. Explore with fictional details because application state, including account details, is stored locally.
+
+## Next improvements
+
+Add authenticated backend APIs, server-side permissions, real integrations, and end-to-end coverage for onboarding and mortgage review. Expand keyboard and mobile usability checks across each role.
